@@ -1,0 +1,4 @@
+---
+
+auth_url: "https://uk1.embassy.ebi.ac.uk:5000/v3/auth/tokens"
+images_url: "https://uk1.embassy.ebi.ac.uk:9292/v2/images"

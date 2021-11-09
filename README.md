@@ -45,15 +45,17 @@ optional arguments:
    pipenv install
    pipenv shell
    ```
- 
-2. Export your credentials in environment variables:
+
+1. Check the settings in config file "config.yaml".
+
+1. Export your credentials in environment variables:
 
    ```
    export OS_APPLICATION_CREDENTIAL_ID="*************"
    export OS_APPLICATION_CREDENTIAL_SECRET="************"
    ```
 
-3. Run the script:
+1. Run the script:
    ```
    $ ./openstack_img_up.py -n my_image -f /tmp/my_image.qcow2
    I'm going to upload the file /tmp/my_image.qcow2 as "my_image" using this service: https://uk1.embassy.ebi.ac.uk:9292/v2/images. Continue? (y/n): 

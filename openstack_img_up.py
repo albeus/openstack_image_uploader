@@ -8,10 +8,9 @@ import requests
 import os
 import argparse
 import sys
+import yaml
 
-# Global variables configuration
-auth_url = "https://uk1.embassy.ebi.ac.uk:5000/v3/auth/tokens" 
-images_url = "https://uk1.embassy.ebi.ac.uk:9292/v2/images"
+config_file = "./config.yaml"
 
 def yes_or_no(question):
     while "the answer is invalid":
@@ -64,6 +63,15 @@ def main():
     except KeyError:
         print("Environment varioable not found: ", sys.exc_info()[1])
         sys.exit(1)
+
+    # Load config file
+    with open(config_file, "r") as stream:
+        try:
+            config = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+    auth_url = config['auth_url']
+    images_url = config['images_url']
 
     # Print summary and ask for confirmation
     question = "I'm going to upload the file {file} as \"{name}\" using this service: {url}. Continue?".\
