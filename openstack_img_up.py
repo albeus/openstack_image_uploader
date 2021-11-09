@@ -10,24 +10,8 @@ import argparse
 import sys
 
 # Global variables configuration
-app_credential_id = os.environ['OS_APPLICATION_CREDENTIAL_ID']
-app_credential_secret = os.environ['OS_APPLICATION_CREDENTIAL_SECRET'] 
-
 auth_url = "https://uk1.embassy.ebi.ac.uk:5000/v3/auth/tokens" 
 images_url = "https://uk1.embassy.ebi.ac.uk:9292/v2/images"
-
-#def yes_or_no(message):
-#    """Simple yes/no propmt."""
-#    yes = {'yes','y', 'ye', ''}
-#    no = {'no','n'}
-#    choice = input(message).lower()
-#    if choice in yes:
-#        return True
-#    elif choice in no:
-#        return False
-#    else:
-#        sys.stdout.write("Please respond with 'yes' or 'no'")
-#        sys.exit(1)
 
 def yes_or_no(question):
     while "the answer is invalid":
@@ -65,19 +49,25 @@ def main():
     """ Main routine.
     """
     parser = argparse.ArgumentParser(description='Upload an image to OpenStack.')
-    parser.add_argument('-n', '--name', help="Name of the new image.")
-    parser.add_argument('-f', '--file', help="Path of the image file to upload.")
+    parser.add_argument('-n', '--name', required=True, help="Name of the new image.")
+    parser.add_argument('-f', '--file', required=True, help="Path of the image file to upload.")
     parser.add_argument('-t', '--disk_type', help="Disk format type (ami, ari, aki, vhd, vhdx, vmdk, raw, qcow2, vdi, ploop or iso). Default:qcow2",
                         default="qcow2")
     args = parser.parse_args()
     image_name = args.name
     file_name = args.file
 
-    
+    # Check credentials in environent variables
+    try:
+        app_credential_id = os.environ['OS_APPLICATION_CREDENTIAL_ID']
+        app_credential_secret = os.environ['OS_APPLICATION_CREDENTIAL_SECRET'] 
+    except KeyError:
+        print("Environment varioable not found: ", sys.exc_info()[1])
+        sys.exit(1)
+
     # Print summary and ask for confirmation
     question = "I'm going to upload the file {file} as \"{name}\" using this service: {url}. Continue?".\
                format(file=file_name, name=image_name, url=images_url)
-
     if not yes_or_no(question):
         sys.exit(0)
 
